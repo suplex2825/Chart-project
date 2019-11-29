@@ -1,0 +1,3395 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="dist/echarts.min.js"></script>
+       <script type="text/javascript" src="dist2/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="dist3/ecStat.min.js"></script>
+       <script type="text/javascript" src="dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="map/js/china.js"></script>
+       <script type="text/javascript" src="map/js/world.js"></script>
+<!--       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>-->
+       <script type="text/javascript" src="dist/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="test/lib/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");         
+var myChart = echarts.init(dom);         
+var app = {};
+option = null;
+         
+         
+var machineStatus = [];
+var runtimeStart = [];
+var runtimeFinished = [];
+var timeStamp = [];         
+         
+         
+fetch('data.json')
+.then(data=> data.json())
+.then(res=> allData(res))
+
+function allData (lop) {
+    var long = lop[0];
+    for(var i = 0 ; i < long.length; i++) {
+      machineStatus.push(long[i].status);
+      runtimeStart.push(long[i].runTimeStart);
+      runtimeFinished.push(long[i].runTimeFinished);
+      timeStamp.push(long[i].id.timestamp);
+    }
+  
+   
+  
+ function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = year + '/' + month + '/' + date + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+
+
+ 
+  
+  
+//  console.log(timeConverter(timeStamp[5]));
+//    var myDate = new Date(timeStamp);
+//      var date = myDate.getDate();
+//      var month = myDate.getMonth();
+//      var year = myDate.getFullYear();
+//
+//      function pad(n) {
+//        return n<10 ? '0'+n : n
+//      }
+//
+//      var ddmmyyyy = year + "/" + pad(month + 1) + "/" +  pad(date);
+//  for(var i = 0; i < timeStamp.length; i++) {
+//        var d = new Date(timeStamp[i]);
+//      var date = d.getDate();
+//      var month = d.getMonth();
+//      var year = d.getFullYear();
+//
+//      function pad(n) {
+//        return n<10 ? '0'+n : n
+//      }
+//
+//      var ddmmyyyy = year + "/" + pad(month + 1) + "/" +  pad(date);
+//      console.log(ddmmyyyy);
+//  }
+
+
+  
+//    for(var i = 0; i < machineStatus.length; i++) {
+//       data.push( {            name: 'e'+i,
+//            value: [
+//                0,
+//                '2016/12/18 00:00:00',
+//                '2016/12/18 00:30:05',
+//                machineStatus[i]
+//            ],
+//            itemStyle: {
+//                normal: {
+//                    color: 'green'
+//                }
+//            }})
+//       
+//    
+//    }        
+var data = [
+    {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 00:00:00',
+                '2016/12/18 01:00:00',
+                machineStatus[0]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'green'
+                }
+            }},    {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 01:00:00',
+                '2016/12/18 01:30:05',
+                machineStatus[1]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 01:30:00',
+                '2016/12/18 01:50:05',
+                machineStatus[2]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'black'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 01:50:00',
+                '2016/12/18 01:59:05',
+                machineStatus[3]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'yellow'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 01:59:00',
+                '2016/12/18 02:10:05',
+                machineStatus[4]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'purple'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 02:16:00',
+                '2016/12/18 02:45:05',
+                machineStatus[5]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'red'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 02:45:00',
+                '2016/12/18 03:00:05',
+                machineStatus[6]
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'skyblue'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 03:00:00',
+                '2016/12/18 03:45:05',
+                machineStatus[7]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#F0F8FF'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 03:45:05',
+                '2016/12/18 03:55:05',
+                machineStatus[8]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FAEBD7'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 03:55:05',
+                '2016/12/18 04:00:05',
+                machineStatus[9]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00FFFF'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 04:00:05',
+                '2016/12/18 04:30:05',
+                machineStatus[10]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7FFFD4'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 04:30:05',
+                '2016/12/18 04:45:05',
+                machineStatus[11]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#F0FFFF'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 04:45:05',
+                '2016/12/18 05:00:05',
+                machineStatus[12]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#F5F5DC'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 05:00:05',
+                '2016/12/18 05:20:05',
+                machineStatus[13]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FFE4C4'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 05:20:05',
+                '2016/12/18 05:24:05',
+                machineStatus[14]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FFEBCD'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 05:24:05',
+                '2016/12/18 05:40:05',
+                machineStatus[15]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#8A2BE2'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 05:40:05',
+                '2016/12/18 05:59:05',
+                machineStatus[16]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#A52A2A'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 05:59:05',
+                '2016/12/18 06:10:05',
+                machineStatus[17]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#DEB887'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:10:05',
+                '2016/12/18 06:15:05',
+                machineStatus[18]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#5F9EA0'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:15:05',
+                '2016/12/18 06:20:05',
+                machineStatus[19]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7FFF00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:20:05',
+                '2016/12/18 06:25:05',
+                machineStatus[20]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#D2691E'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:25:05',
+                '2016/12/18 06:31:05',
+                machineStatus[21]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FF7F50'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:31:05',
+                '2016/12/18 06:40:05',
+                machineStatus[22]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#DC143C'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:40:05',
+                '2016/12/18 06:45:05',
+                machineStatus[23]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00008B'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:45:05',
+                '2016/12/18 06:50:05',
+                machineStatus[24]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#B8860B'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:50:05',
+                '2016/12/18 06:59:00',
+                machineStatus[25]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#006400'
+                }
+            }},    {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 06:59:00',
+                '2016/12/18 07:03:05',
+                machineStatus[26]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FF1493'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:03:05',
+                '2016/12/18 07:10:05',
+                machineStatus[27]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FF00FF'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:10:05',
+                '2016/12/18 07:15:05',
+                machineStatus[28]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FFD700'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:15:05',
+                '2016/12/18 07:20:05',
+                machineStatus[29]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ADFF2F'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:20:05',
+                '2016/12/18 07:25:05',
+                machineStatus[30]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#F0FFF0'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:25:05',
+                '2016/12/18 07:30:05',
+                machineStatus[31]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#4B0082'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:30:05',
+                '2016/12/18 07:35:05',
+                machineStatus[32]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#F0E68C'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:35:05',
+                '2016/12/18 07:40:05',
+                machineStatus[33]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7CFC00'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:40:05',
+                '2016/12/18 07:45:05',
+                machineStatus[34]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ADD8E6'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:45:05',
+                '2016/12/18 07:50:05',
+                machineStatus[35]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#F08080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:50:05',
+                '2016/12/18 07:55:05',
+                machineStatus[36]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FFA07A'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:55:05',
+                '2016/12/18 07:59:05',
+                machineStatus[37]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#6B8E23'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 07:59:05',
+                '2016/12/18 08:05:05',
+                machineStatus[38]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#EEE8AA'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:05:05',
+                '2016/12/18 08:10:05',
+                machineStatus[39]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#FFC0CB'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:10:05',
+                '2016/12/18 08:15:05',
+                machineStatus[40]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#B0E0E6'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:15:05',
+                '2016/12/18 08:20:05',
+                machineStatus[41]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#4169E1'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:20:05',
+                '2016/12/18 08:25:05',
+                machineStatus[42]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#40E0D0'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:25:05',
+                '2016/12/18 08:30:05',
+                machineStatus[43]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#9ACD32'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:30:05',
+                '2016/12/18 08:35:05',
+                machineStatus[44]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:35:05',
+                '2016/12/18 08:40:05',
+                machineStatus[45]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#936c6c'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:40:05',
+                '2016/12/18 08:45:05',
+                machineStatus[46]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#C4FE91'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:45:05',
+                '2016/12/18 08:50:05',
+                machineStatus[47]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#1BD8B9'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:50:05',
+                '2016/12/18 08:55:05',
+                machineStatus[48]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#E1C5A2'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:55:05',
+                '2016/12/18 08:59:05',
+                machineStatus[49]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#DED959'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 08:59:05',
+                '2016/12/18 09:03:00',
+                machineStatus[50]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#BA59DE'
+                }
+            }},    {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:03:00',
+                '2016/12/18 09:08:05',
+                machineStatus[51]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#431056'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:08:05',
+                '2016/12/18 09:13:05',
+                machineStatus[52]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#564810'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:13:05',
+                '2016/12/18 09:18:05',
+                machineStatus[53]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#2E2604'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:18:05',
+                '2016/12/18 09:22:05',
+                machineStatus[54]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ADCD2E'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:22:05',
+                '2016/12/18 09:26:05',
+                machineStatus[55]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#CD882E'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:26:05',
+                '2016/12/18 09:31:05',
+                machineStatus[56]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#69E5F3'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:31:05',
+                '2016/12/18 09:36:05',
+                machineStatus[57]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#1DA7B6'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:36:05',
+                '2016/12/18 09:40:05',
+                machineStatus[58]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#0C7813'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:40:05',
+                '2016/12/18 09:45:05',
+                machineStatus[59]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#51C358'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:45:05',
+                '2016/12/18 09:50:05',
+                machineStatus[60]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#EF2405'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:50:05',
+                '2016/12/18 09:55:05',
+                machineStatus[61]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#8C5D39'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:55:05',
+                '2016/12/18 09:59:05',
+                machineStatus[62]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#93E616'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 09:59:05',
+                '2016/12/18 10:03:05',
+                machineStatus[63]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dda0dd'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:03:05',
+                '2016/12/18 10:08:05',
+                machineStatus[64]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#a0522d'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:08:05',
+                '2016/12/18 10:13:05',
+                machineStatus[65]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ff6347'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:13:05',
+                '2016/12/18 10:18:05',
+                machineStatus[66]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#40e0d0'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:18:05',
+                '2016/12/18 10:23:05',
+                machineStatus[67]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '    #00ff7f'
+                }
+            }},            
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:23:05',
+                '2016/12/18 10:33:05',
+                machineStatus[69]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#6a5acd'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:33:05',
+                '2016/12/18 10:38:05',
+                machineStatus[70]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#fff5ee'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:38:05',
+                '2016/12/18 10:42:05',
+                machineStatus[71]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#fffafa'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:42:05',
+                '2016/12/18 10:47:05',
+                machineStatus[72]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#a0522d'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:47:05',
+                '2016/12/18 10:52:05',
+                machineStatus[73]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#2e8b57'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:52:05',
+                '2016/12/18 10:59:05',
+                machineStatus[74]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#8b4513'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 10:59:05',
+                '2016/12/18 11:06:00',
+                machineStatus[75]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#bc8f8f'
+                }
+            }},    {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:06:00',
+                '2016/12/18 11:11:05',
+                machineStatus[76]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#bc8f8f'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:11:05',
+                '2016/12/18 11:16:05',
+                machineStatus[77]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#cd853f'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:16:05',
+                '2016/12/18 11:20:05',
+                machineStatus[78]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#98fb98'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:20:05',
+                '2016/12/18 11:25:05',
+                machineStatus[79]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffdead'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:25:05',
+                '2016/12/18 11:30:05',
+                machineStatus[80]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#48d1cc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:30:05',
+                '2016/12/18 11:35:05',
+                machineStatus[81]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7b68ee'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:35:05',
+                '2016/12/18 11:40:05',
+                machineStatus[82]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ff00ff'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:40:05',
+                '2016/12/18 11:45:05',
+                machineStatus[83]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#faf0e6'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:45:05',
+                '2016/12/18 11:50:05',
+                machineStatus[84]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffffe0'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:50:05',
+                '2016/12/18 11:59:05',
+                machineStatus[85]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffb6c1'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 11:59:05',
+                '2016/12/18 12:03:05',
+                machineStatus[86]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#90ee90'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:03:05',
+                '2016/12/18 12:08:05',
+                machineStatus[87]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#e0ffff'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:08:05',
+                '2016/12/18 12:13:05',
+                machineStatus[88]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#cd5c5c'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:13:05',
+                '2016/12/18 12:18:05',
+                machineStatus[89]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:18:05',
+                '2016/12/18 12:22:05',
+                machineStatus[90]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:22:05',
+                '2016/12/18 12:25:05',
+                machineStatus[91]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:25:05',
+                '2016/12/18 12:31:05',
+                machineStatus[92]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:31:05',
+                '2016/12/18 12:35:05',
+                machineStatus[93]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:35:05',
+                '2016/12/18 12:40:05',
+                machineStatus[94]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:40:05',
+                '2016/12/18 12:45:05',
+                machineStatus[95]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:45:05',
+                '2016/12/18 12:50:05',
+                machineStatus[96]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:50:05',
+                '2016/12/18 12:59:05',
+                machineStatus[97]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 12:59:05',
+                '2016/12/18 13:06:05',
+                machineStatus[98]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:06:05',
+                '2016/12/18 13:11:05',
+                machineStatus[99]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#f0ffff'
+                }
+            }},
+                  {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:11:05',
+                '2016/12/18 13:16:05',
+                machineStatus[100]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#800080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:16:05',
+                '2016/12/18 13:21:05',
+                machineStatus[101]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#c0c0c0'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:21:05',
+                '2016/12/18 13:26:05',
+                machineStatus[102]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:26:05',
+                '2016/12/18 13:31:05',
+                machineStatus[103]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:36:05',
+                '2016/12/18 13:41:05',
+                machineStatus[104]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:46:05',
+                '2016/12/18 13:51:05',
+                machineStatus[105]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:51:05',
+                '2016/12/18 13:59:05',
+                machineStatus[106]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 13:59:05',
+                '2016/12/18 14:03:05',
+                machineStatus[107]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:03:05',
+                '2016/12/18 14:08:05',
+                machineStatus[108]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:08:05',
+                '2016/12/18 14:13:05',
+                machineStatus[109]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:13:05',
+                '2016/12/18 14:18:05',
+                machineStatus[110]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:18:05',
+                '2016/12/18 14:22:05',
+                machineStatus[111]
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:22:05',
+                '2016/12/18 14:30:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+                   {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:30:00',
+                '2016/12/18 14:35:05',
+                'hikaru'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'yellow'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:35:05',
+                '2016/12/18 14:40:05',
+                'carlsen'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#B0E0E6'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:40:05',
+                '2016/12/18 14:45:05',
+                'Y2J'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#4169E1'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:45:05',
+                '2016/12/18 14:50:05',
+                'oop'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#40E0D0'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:50:05',
+                '2016/12/18 14:55:05',
+                'uiui'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#9ACD32'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 14:55:05',
+                '2016/12/18 15:03:05',
+                'hj'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:03:05',
+                '2016/12/18 15:08:05',
+                'erer'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:08:05',
+                '2016/12/18 15:11:05',
+                'assd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#f0ffff'
+                }
+            }},
+                  {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:11:05',
+                '2016/12/18 15:16:05',
+                'asd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#800080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:16:05',
+                '2016/12/18 15:21:05',
+                'asds'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#c0c0c0'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:21:05',
+                '2016/12/18 15:26:05',
+                'huhu'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:26:05',
+                '2016/12/18 15:31:05',
+                'bvcx'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:31:05',
+                '2016/12/18 15:36:05',
+                'fgfg'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:36:05',
+                '2016/12/18 15:41:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:41:05',
+                '2016/12/18 15:46:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:46:05',
+                '2016/12/18 15:51:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 15:51:05',
+                '2016/12/18 16:00:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:00:05',
+                '2016/12/18 16:05:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:05:05',
+                '2016/12/18 16:11:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:11:05',
+                '2016/12/18 16:16:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:16:05',
+                '2016/12/18 16:21:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+                 {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:21:00',
+                '2016/12/18 16:26:05',
+                'assd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#f0ffff'
+                }
+            }},
+                  {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:26:05',
+                '2016/12/18 16:31:05',
+                'asd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#800080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:31:05',
+                '2016/12/18 16:36:05',
+                'asds'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#c0c0c0'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:36:05',
+                '2016/12/18 16:41:05',
+                'huhu'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:41:05',
+                '2016/12/18 16:46:05',
+                'bvcx'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:46:05',
+                '2016/12/18 16:51:05',
+                'fgfg'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 16:51:05',
+                '2016/12/18 17:00:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:00:05',
+                '2016/12/18 17:05:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:05:05',
+                '2016/12/18 17:11:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:11:05',
+                '2016/12/18 17:16:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:16:05',
+                '2016/12/18 17:21:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:21:05',
+                '2016/12/18 17:36:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:36:05',
+                '2016/12/18 17:41:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:41:05',
+                '2016/12/18 17:46:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 17:51:05',
+                '2016/12/18 18:00:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:00:05',
+                '2016/12/18 18:05:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:05:05',
+                '2016/12/18 18:11:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:11:05',
+                '2016/12/18 18:16:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:16:05',
+                '2016/12/18 18:21:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+                 {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:21:00',
+                '2016/12/18 18:26:05',
+                'assd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#f0ffff'
+                }
+            }},
+                  {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:26:05',
+                '2016/12/18 18:31:05',
+                'asd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#800080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:31:05',
+                '2016/12/18 18:36:05',
+                'asds'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#c0c0c0'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:36:05',
+                '2016/12/18 18:41:05',
+                'huhu'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:41:05',
+                '2016/12/18 18:46:05',
+                'bvcx'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:46:05',
+                '2016/12/18 18:51:05',
+                'fgfg'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 18:51:05',
+                '2016/12/18 19:00:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:00:05',
+                '2016/12/18 19:05:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:05:05',
+                '2016/12/18 19:11:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:11:05',
+                '2016/12/18 19:16:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:16:05',
+                '2016/12/18 19:21:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:21:05',
+                '2016/12/18 19:26:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:26:05',
+                '2016/12/18 19:31:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:31:05',
+                '2016/12/18 19:36:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+                   {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:36:00',
+                '2016/12/18 19:41:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:41:05',
+                '2016/12/18 19:46:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:46:05',
+                '2016/12/18 19:51:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+                 {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 19:51:00',
+                '2016/12/18 20:00:00',
+                'assd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#f0ffff'
+                }
+            }},
+                  {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:00:00',
+                '2016/12/18 20:05:05',
+                'asd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#800080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:05:05',
+                '2016/12/18 20:11:05',
+                'asds'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#c0c0c0'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:11:05',
+                '2016/12/18 20:16:05',
+                'huhu'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:16:05',
+                '2016/12/18 20:21:05',
+                'bvcx'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:21:05',
+                '2016/12/18 20:26:05',
+                'fgfg'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:26:05',
+                '2016/12/18 20:31:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:31:05',
+                '2016/12/18 20:36:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:36:05',
+                '2016/12/18 20:41:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:41:05',
+                '2016/12/18 20:46:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:46:05',
+                '2016/12/18 20:51:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 20:51:05',
+                '2016/12/18 21:00:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:00:05',
+                '2016/12/18 21:05:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:05:05',
+                '2016/12/18 21:11:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:11:00',
+                '2016/12/18 21:16:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:16:05',
+                '2016/12/18 21:21:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:21:05',
+                '2016/12/18 21:26:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:26:05',
+                '2016/12/18 21:31:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:31:05',
+                '2016/12/18 21:36:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:36:05',
+                '2016/12/18 21:41:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:41:05',
+                '2016/12/18 21:46:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:46:05',
+                '2016/12/18 21:51:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 21:51:00',
+                '2016/12/18 22:00:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+                 {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:00:00',
+                '2016/12/18 22:05:00',
+                'assd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#f0ffff'
+                }
+            }},
+                  {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:05:00',
+                '2016/12/18 22:11:05',
+                'asd'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#800080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:11:05',
+                '2016/12/18 22:16:05',
+                'asds'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#c0c0c0'
+                }
+            }}, 
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:16:05',
+                '2016/12/18 22:21:05',
+                'huhu'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:21:05',
+                '2016/12/18 22:26:05',
+                'bvcx'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#daa520'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:26:05',
+                '2016/12/18 22:31:05',
+                'fgfg'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#ffd700'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:31:05',
+                '2016/12/18 22:36:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:36:05',
+                '2016/12/18 22:41:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:41:05',
+                '2016/12/18 22:46:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:46:05',
+                '2016/12/18 22:51:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:51:05',
+                '2016/12/18 22:56:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 22:56:05',
+                '2016/12/18 23:00:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:00:05',
+                '2016/12/18 23:05:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:05:05',
+                '2016/12/18 23:11:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:11:00',
+                '2016/12/18 23:16:05',
+                'ccv'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#dcdcdc'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:16:05',
+                '2016/12/18 23:21:05',
+                'aas'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#b22222'
+                }
+            }},
+             
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:21:05',
+                '2016/12/18 23:26:05',
+                'lt'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#808080'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:26:05',
+                '2016/12/18 23:31:05',
+                'bcbh'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#483d8b'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:31:05',
+                '2016/12/18 23:36:05',
+                'rttr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#556b2f'
+                }
+            }},
+              {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:36:05',
+                '2016/12/18 23:41:05',
+                'zxxz'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#00ffff'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:41:05',
+                '2016/12/18 23:46:05',
+                'cdr'
+            ],
+            itemStyle: {
+                normal: {
+                    color: '#7fff00'
+                }
+            }},
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:46:05',
+                '2016/12/18 23:51:00',
+                'wmx123'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/18 23:51:00',
+                '2016/12/18 24:00:00',
+                'hiki'
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+    ];
+  
+ 
+  var time1 = ['00:00:00','01:00:00','01:30:00','01:50:00','01:59:00','02:16:00','02:45:00','03:00:00','03:45:05','03:55:05','04:00:05','04:30:05', '04:45:05','05:00:05','05:20:05','05:24:05','05:40:05','05:59:05','06:10:05','06:15:05','06:20:05','06:25:05','06:31:05','06:40:05','06:45:05','06:50:05','06:59:00','07:03:05','07:10:05','07:15:05','07:20:05','07:25:05','07:30:05','07:35:05','07:40:05','07:45:05','07:50:05','07:55:05','07:59:05','08:05:05','08:10:05','08:15:05','08:20:05','08:25:05','08:30:05','08:35:05','08:40:05','08:45:05','08:50:05','08:55:05','08:59:05','09:03:00','09:08:05','09:13:05','09:18:05','09:22:05','09:26:05','09:31:05','09:36:05','09:40:05','09:45:05','09:50:05','09:55:05','09:59:05','10:03:05','10:08:05','10:13:05','10:18:05','10:23:05','10:33:05','10:38:05','10:42:05','10:47:05','10:52:05','10:59:05','11:06:00','11:11:05','11:16:05','11:20:05','11:25:05','11:30:05','11:35:05','11:40:05','11:45:05','11:50:05','11:59:05','12:03:05','12:08:05','12:13:05','12:18:05','12:22:05','12:25:05','12:31:05','12:35:05','12:40:05','12:45:05','12:50:05','12:59:05','13:06:05','13:11:05','13:16:05','13:21:05','13:26:05','13:36:05','13:46:05','13:51:05','13:59:05','14:03:05','14:08:05','14:13:05','14:18:05','14:22:05','14:30:00','14:35:05','14:40:05','14:45:05','14:50:05','14:55:05','15:03:05','15:08:05','15:11:05','15:16:05','15:21:05','15:26:05','15:31:05','15:36:05','15:41:05','15:46:05','15:51:05','16:00:05','16:05:05','16:11:05','16:16:05','16:21:00','16:26:05','16:31:05','16:36:05','16:41:05','16:46:05','16:51:05','17:00:05','17:05:05','17:11:05',' 17:16:05','17:21:05','17:36:05','17:41:05','17:51:05','18:00:05','18:05:05','18:11:05','18:16:05','18:21:00','18:26:05','18:31:05','18:36:05','18:41:05','18:46:05','18:51:05','19:00:05','19:05:05','19:11:05','19:16:05','19:21:05','19:26:05','19:31:05','19:36:00','19:41:05','19:46:05','19:51:00','20:00:00','20:05:05','20:11:05','20:16:05','20:21:05','20:26:05','20:31:05','20:36:05','20:41:05','20:46:05','20:51:05','21:00:05','21:05:05','21:11:00','21:16:05','21:21:05','21:26:05','21:31:05','21:36:05','21:41:05','21:46:05','21:51:00','22:00:00','22:05:00','22:11:05','22:16:05','22:21:05','22:26:05','22:31:05','22:36:05','22:41:05','22:46:05','22:51:05','22:56:05','23:00:05','23:05:05','23:11:00','23:16:05','23:21:05','23:26:05','23:31:05','23:36:05','23:41:05','23:46:05','23:51:00'];
+ 
+  
+  var time2 = ['01:00:00','01:30:05','01:50:05','01:59:05','02:10:05','02:45:05','03:00:05','03:45:05','03:55:05','04:00:05','04:30:05','04:45:05','05:00:05','05:20:05','05:24:05','05:40:05','05:59:05','06:10:05','06:15:05','06:20:05','06:25:05','06:31:05','06:40:05','06:45:05','06:50:05','06:59:00','07:03:05','07:10:05','07:15:05','07:20:05','07:25:05','07:30:05','07:35:05','07:40:05','07:45:05','07:50:05','07:55:05','07:59:05','08:05:05','08:10:05','08:15:05','08:20:05','08:25:05','08:30:05','08:35:05','08:40:05','08:45:05','08:50:05','08:55:05','08:59:05','09:03:00','09:08:05','09:13:05','09:18:05','09:22:05','09:26:05','09:31:05','09:36:05','09:40:05','09:45:05','09:50:05','09:55:05','09:59:05','10:03:05','10:08:05','10:13:05','10:18:05','10:23:05','10:33:05','10:38:05','10:42:05','10:47:05','10:52:05','10:59:05','11:06:00','11:11:05','11:16:05','11:20:05','11:25:05','11:30:05','11:35:05','11:40:05','11:45:05','11:50:05','11:59:05','12:03:05','12:08:05','12:13:05','12:18:05','12:22:05','12:25:05','12:31:05','12:35:05','12:40:05','12:45:05','12:50:05','12:59:05','13:06:05','13:11:05','13:16:05','13:21:05','13:26:05','13:31:05','13:41:05','13:51:05','13:59:05','14:03:05','14:08:05','14:13:05','14:18:05','14:22:05','14:30:00','14:35:05','14:40:05','14:45:05','14:50:05','14:55:05','15:03:05','15:08:05','15:11:05','15:16:05','15:21:05','15:26:05','15:31:05','15:36:05','15:41:05','15:46:05','15:51:05','16:00:05','16:05:05','16:11:05','16:16:05','16:21:00','16:26:05','16:31:05','16:36:05','16:41:05','16:46:05','16:51:05','17:00:05','17:05:05','17:11:05','17:16:05','17:21:05','17:36:05','17:41:05','17:46:00','18:00:05','18:05:05','18:11:05','18:16:05','18:21:00','18:26:05','18:31:05','18:36:05','18:41:05','18:46:05','18:51:05','19:00:05','19:05:05','19:11:05','19:16:05','19:21:05','19:26:05','19:31:05','19:36:00','19:41:05','19:46:05','19:51:00','20:00:00','20:05:05','20:11:05','20:16:05','20:21:05','20:26:05','20:31:05','20:36:05','20:41:05','20:46:05','20:51:05','21:00:05','21:05:05','21:11:00','21:16:05','21:21:05','21:26:05','21:31:05','21:36:05','21:41:05','21:46:05','21:51:00','22:00:00','22:05:00','22:11:05','22:16:05','22:21:05','22:26:05','22:31:05','22:36:05','22:41:05','22:46:05','22:51:05','22:56:05','23:00:05','23:05:05','23:11:00','23:16:05','23:21:05','23:26:05','23:31:05','23:36:05','23:41:05','23:46:05','23:51:00','24:00:00'];
+  
+
+  for(var i = 0; ( (i < time1.length) && (i < time2.length)); i++) {
+     var first = time1[i];
+     var second = time2[i];
+     var t1 = new Date('0 '+first);
+     var t2 = new Date('0 '+second);
+     var diff = new Date(t2-t1);
+     var timeDif = diff.toLocaleTimeString('en-US',{timeZone: 'UTC',hour12: false});
+    
+     data.push( {            name: 'e',
+            value: [
+                0,
+                '2016/12/19 '+first,
+                '2016/12/19 '+second,
+                'hiki'+i,
+                '2016/12/19 '+first,
+                '2016/12/19 '+second,
+                '2016/12/19 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'blue'
+                }
+            }},
+              
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/20 '+first,
+                '2016/12/20 '+second,
+                'hiki'+i,
+                '2016/12/20 '+first,
+                '2016/12/20 '+second,
+                '2016/12/20 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'red'
+                }
+            }},
+//              
+                 
+            {            name: 'e',
+            value: [
+                0,
+                '2016/12/21 '+first,
+                '2016/12/21 '+second,
+                'hiki'+i,
+                '2016/12/21 '+first,
+                '2016/12/21 '+second,
+                '2016/12/21 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'green'
+                }
+            }},
+//              
+             {            name: 'e',
+            value: [
+                0,
+                '2016/12/22 '+first,
+                '2016/12/22 '+second,
+                'hiki'+i,
+                '2016/12/22 '+first,
+                '2016/12/22 '+second,
+                '2016/12/22 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'yellow'
+                }
+            }},
+//              
+               {            name: 'e',
+            value: [
+                0,
+                '2016/12/23 '+first,
+                '2016/12/23 '+second,
+                'hiki'+i,
+                '2016/12/23 '+first,
+                '2016/12/23 '+second,
+                '2016/12/23 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'purple'
+                }
+            }},
+             
+                {            name: 'e',
+            value: [
+                0,
+                '2016/12/24 '+first,
+                '2016/12/24 '+second,
+                'hiki'+i,
+                '2016/12/24 '+first,
+                '2016/12/24 '+second,
+                '2016/12/24 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'coral'
+                }
+            }},
+               
+               
+                {            name: 'e',
+            value: [
+                0,
+                '2016/12/25 '+first,
+                '2016/12/25 '+second,
+                'hiki'+i,
+                '2016/12/25 '+first,
+                '2016/12/25 '+second,
+                '2016/12/25 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'brown'
+                }
+            }}
+              )
+    
+  }
+  
+    
+  for(var i = 0; i<timeStamp.length;i+=2) {
+      var newTime = timeConverter(timeStamp[i]);
+      var newTime2 = timeConverter(timeStamp[i+1]);
+      data.push(  {            name: 'e',
+            value: [
+                0,
+                newTime,
+                newTime2,
+                'hiki'+i,
+                newTime,
+                newTime2,
+//                '2016/12/25 '+timeDif
+            ],
+            itemStyle: {
+                normal: {
+                    color: 'red'
+                }
+            }})
+    
+  }
+     
+
+   console.log(data.length);
+  //runtime color: #20A7AA
+  //idle time color: #FF8C00
+  //offline time color:#808080
+  
+//  var timeArray = [0,1,2,3,4,5,6,7,8,9,10,11,12];
+//  
+//  data.push(
+//    {            name: 'e',
+//            value: [
+//                0,
+//                '2016/12/18 ' + timeArray[0]+':00:00',
+//                '2016/12/18 ' + timeArray[10]+':59:01',
+//                machineStatus[9]
+//            ],
+//            itemStyle: {
+//                normal: {
+//                    color: ''
+//                }
+//            }} 
+//                  );
+  
+//  for(var i = 0; i < machineStatus.length; i++) {
+//       data.push( {            name: 'e'+i,
+//            value: [
+//                0,
+//                '2016/12/18 01:00:00',
+//                '2016/12/18 01:30:05',
+//                machineStatus[i]
+//            ],
+//            itemStyle: {
+//                normal: {
+//                    color: 'green'
+//                }
+//            }})
+//       
+//    
+//    }
+
+console.log(machineStatus);  
+var dataCount = 10;
+var startTime = +new Date();
+var categories = ['Machine1', 'Machine2', 'Machine3'];
+var types = [
+    {name: 'JS Heap', color: '#7b9ce1'},
+    {name: 'Documents', color: '#bd6d6c'},
+    {name: 'Nodes', color: '#75d874'},
+    {name: 'Listeners', color: '#e0bc78'},
+    {name: 'GPU Memory', color: '#dc77dc'},
+    {name: 'GPU', color: '#72b362'}
+];
+var anchor = [
+    {name:'2016/12/18 00:00:00', value:['2016/12/18 00:00:00', 0]},
+    {name:'2016/12/19 00:00:00', value:['2016/12/19 00:00:00', 0]},
+    {name:'2016/12/20 00:00:00', value:['2016/12/20 00:00:00',0]},
+    {name:'2016/12/21 00:00:00', value:['2016/12/21 00:00:00',0]},
+    {name:'2016/12/22 00:00:00', value:['2016/12/22 00:00:00',0]},
+    {name:'2016/12/23 00:00:00', value:['2016/12/23 00:00:00',0]},
+    {name:'2016/12/24 00:00:00', value:['2016/12/24 00:00:00',0]},
+    {name:'2016/12/25 00:00:00', value:['2016/12/25 00:00:00',0]},
+    ];
+                             
+  
+  
+    for(var i = 26; i <= 31; i++) {
+      anchor.push( {name:'2016/12/'+i+' 00:00:00', value:['2016/12/'+i+' 00:00:00',0]})
+    }
+    
+  
+   for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/1/'+i+' 00:00:00', value:['2017/1/'+i+' 00:00:00',0]})
+   }
+         
+   for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2017/2/'+i+ ' 00:00:00', value:['2017/2/'+i+' 00:00:00',0]})
+   }      
+       
+    for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/3/'+i+' 00:00:00', value:['2017/3/'+i+' 00:00:00',0]})
+   }
+         
+    for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2017/4/'+i+ ' 00:00:00', value:['2017/4/'+i+' 00:00:00',0]})
+   }      
+   
+     for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/5/'+i+' 00:00:00', value:['2017/5/'+i+' 00:00:00',0]})
+   }
+         
+     for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2017/6/'+i+ ' 00:00:00', value:['2017/6/'+i+' 00:00:00',0]})
+   }   
+         
+     for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/7/'+i+' 00:00:00', value:['2017/7/'+i+' 00:00:00',0]})
+   } 
+         
+      for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/8/'+i+' 00:00:00', value:['2017/8/'+i+' 00:00:00',0]})
+   }
+         
+      for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2017/9/'+i+ ' 00:00:00', value:['2017/9/'+i+' 00:00:00',0]})
+   }
+
+      for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/10/'+i+' 00:00:00', value:['2017/10/'+i+' 00:00:00',0]})
+   }
+
+       for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2017/11/'+i+ ' 00:00:00', value:['2017/11/'+i+' 00:00:00',0]})
+   }
+   
+           for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2017/12/'+i+' 00:00:00', value:['2017/12/'+i+' 00:00:00',0]})
+   }
+
+         
+         
+    
+          for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/1/'+i+' 00:00:00', value:['2018/1/'+i+' 00:00:00',0]})
+   }
+         
+   for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2018/2/'+i+ ' 00:00:00', value:['2018/2/'+i+' 00:00:00',0]})
+   }      
+       
+    for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/3/'+i+' 00:00:00', value:['2018/3/'+i+' 00:00:00',0]})
+   }
+         
+    for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2018/4/'+i+ ' 00:00:00', value:['2018/4/'+i+' 00:00:00',0]})
+   }      
+   
+     for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/5/'+i+' 00:00:00', value:['2018/5/'+i+' 00:00:00',0]})
+   }
+         
+     for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2018/6/'+i+ ' 00:00:00', value:['2018/6/'+i+' 00:00:00',0]})
+   }   
+         
+     for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/7/'+i+' 00:00:00', value:['2018/7/'+i+' 00:00:00',0]})
+   } 
+         
+      for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/8/'+i+' 00:00:00', value:['2018/8/'+i+' 00:00:00',0]})
+   }
+         
+      for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2018/9/'+i+ ' 00:00:00', value:['2018/9/'+i+' 00:00:00',0]})
+   }
+
+      for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/10/'+i+' 00:00:00', value:['2018/10/'+i+' 00:00:00',0]})
+   }
+
+       for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2018/11/'+i+ ' 00:00:00', value:['2018/11/'+i+' 00:00:00',0]})
+   }
+   
+           for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2018/12/'+i+' 00:00:00', value:['2018/12/'+i+' 00:00:00',0]})
+   }
+         
+         
+         
+         
+          
+          for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/1/'+i+' 00:00:00', value:['2019/1/'+i+' 00:00:00',0]})
+   }
+         
+   for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2019/2/'+i+ ' 00:00:00', value:['2019/2/'+i+' 00:00:00',0]})
+   }      
+       
+    for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/3/'+i+' 00:00:00', value:['2019/3/'+i+' 00:00:00',0]})
+   }
+         
+    for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2019/4/'+i+ ' 00:00:00', value:['2019/4/'+i+' 00:00:00',0]})
+   }      
+   
+     for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/5/'+i+' 00:00:00', value:['2019/5/'+i+' 00:00:00',0]})
+   }
+         
+     for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2019/6/'+i+ ' 00:00:00', value:['2019/6/'+i+' 00:00:00',0]})
+   }   
+         
+     for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/7/'+i+' 00:00:00', value:['2019/7/'+i+' 00:00:00',0]})
+   } 
+         
+      for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/8/'+i+' 00:00:00', value:['2019/8/'+i+' 00:00:00',0]})
+   }
+         
+      for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2019/9/'+i+ ' 00:00:00', value:['2019/9/'+i+' 00:00:00',0]})
+   }
+
+      for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/10/'+i+' 00:00:00', value:['2019/10/'+i+' 00:00:00',0]})
+   }
+
+       for(var i = 1; i <= 30; i++) {
+      anchor.push({name:'2019/11/'+i+ ' 00:00:00', value:['2019/11/'+i+' 00:00:00',0]})
+   }
+   
+           for(var i = 1; i <= 31; i++) {
+      anchor.push({name:'2019/12/'+i+' 00:00:00', value:['2019/12/'+i+' 00:00:00',0]})
+   }
+//  for(var i = 0; i < timeStamp.length; i++) {
+//      var myDate = new Date(timeStamp[i]);
+//      var date = myDate.getDate();
+//      var month = myDate.getMonth();
+//      var year = myDate.getFullYear();
+//
+//      function pad(n) {
+//        return n<10 ? '0'+n : n
+//      }
+//
+//      var ddmmyyyy = year + "/" + pad(month + 1) + "/" +  pad(date);
+//      console.log(ddmmyyyy);
+//  }
+  
+  
+// Generate mock data
+/*echarts.util.each(categories, function (category, index) {
+    var baseTime = startTime;
+    for (var i = 0; i < dataCount; i++) {
+        var typeItem = types[Math.round(Math.random() * (types.length - 1))];
+        var duration = Math.round(Math.random() * 10000);
+        data.push({
+            name: typeItem.name,
+            value: [
+                index,
+                baseTime,
+                baseTime += duration,
+                duration
+            ],
+            itemStyle: {
+                normal: {
+                    color: typeItem.color
+                }
+            }
+        });
+        baseTime += Math.round(Math.random() * 2000);
+    }
+});*/
+console.log(data);
+function renderItem(params, api) {
+//    console.log(api);
+    var categoryIndex = api.value(0);
+    var start = api.coord([api.value(1), categoryIndex]);
+    var end = api.coord([api.value(2), categoryIndex]);
+    var height = api.size([0, 1])[1] * 0.6;
+
+    return {
+        type: 'rect',
+        shape: echarts.graphic.clipRectByRect({
+            x: start[0],
+            y: start[1] - height / 2,
+            width: end[0] - start[0],
+            height: height
+        }, {
+            x: params.coordSys.x,
+            y: params.coordSys.y,
+            width: params.coordSys.width,
+            height: params.coordSys.height
+        }),
+        style: api.style()
+    };
+}
+
+
+option = {
+    tooltip: {
+        formatter: function (params) {
+            return params.marker + params.name + ': ' + params.value[3] + ' ms '+'<br>'+'開始時間:' + params.value[4] +'<br>'+'結束時間:' + params.value[5]+'<br>'+'維持時間:'+params.value[6];
+        }
+    
+    },
+    title: {
+        text: 'Profile',
+        left: 'center'
+    },
+    legend: {
+        data: ['bar', 'error']
+    },
+    dataZoom: [{
+        type: 'slider',
+        filterMode: 'weakFilter',
+        showDataShadow: false,
+        top: 400,
+        height: 10,
+        borderColor: 'transparent',
+        backgroundColor: '#e2e2e2',
+        handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7v-1.2h6.6z M13.3,22H6.7v-1.2h6.6z M13.3,19.6H6.7v-1.2h6.6z', // jshint ignore:line
+        handleSize: 20,
+        handleStyle: {
+            shadowBlur: 6,
+            shadowOffsetX: 1,
+            shadowOffsetY: 2,
+            shadowColor: '#aaa'
+        },
+        labelFormatter: ''
+    }, {
+        type: 'inside',
+        filterMode: 'weakFilter'
+    }],
+    grid: {
+        height:300
+    },
+    xAxis: {
+        type:'time',
+        //min: startTime,
+        scale: true,
+        //axisLabel: {
+        //    formatter: function (val) {
+       //         return Math.max(0, val - startTime) + ' ms';
+       //     }
+       // }
+    },
+    yAxis: {
+        data: categories
+    },
+    series: [{
+        type: 'custom',
+        renderItem: renderItem,
+        itemStyle: {
+            normal: {
+                opacity: 0.8
+            }
+        },
+        encode: {
+            x: [1, 2],
+            y: 0
+        },
+        data: data
+    },{
+        name:'anchor',
+        type:'line', 
+        showSymbol:false, 
+        data:anchor,
+        itemStyle:{normal:{opacity:0}},
+        lineStyle:{normal:{opacity:0}}
+    }]
+};
+;
+myChart.on('click',function(p){
+    console.log('click');
+    console.log(p)
+});
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+  
+}
+
+
+        
+//       
+//var data = [
+//    {            name: 'e',
+//            value: [
+//                0,
+//                '2016/12/18 00:00:00',
+//                '2016/12/18 00:30:05',
+//                10
+//            ],
+//            itemStyle: {
+//                normal: {
+//                    color: 'green'
+//                }
+//            }},    {            name: 'e',
+//            value: [
+//                0,
+//                '2016/12/18 01:00:00',
+//                '2016/12/18 01:30:05',
+//                '123wmx'
+//            ],
+//            itemStyle: {
+//                normal: {
+//                    color: 'blue'
+//                }
+//            }}
+//    ];
+//var dataCount = 10;
+//var startTime = +new Date();
+//var categories = ['categoryA', 'categoryB', 'categoryC'];
+//var types = [
+//    {name: 'JS Heap', color: '#7b9ce1'},
+//    {name: 'Documents', color: '#bd6d6c'},
+//    {name: 'Nodes', color: '#75d874'},
+//    {name: 'Listeners', color: '#e0bc78'},
+//    {name: 'GPU Memory', color: '#dc77dc'},
+//    {name: 'GPU', color: '#72b362'}
+//];
+//var anchor = [
+//    {name:'2016/12/18 00:00:00', value:['2016/12/18 00:00:00', 0]},
+//    {name:'2016/12/19 00:00:00', value:['2016/12/19 00:00:00', 0]}
+//    ];
+//// Generate mock data
+///*echarts.util.each(categories, function (category, index) {
+//    var baseTime = startTime;
+//    for (var i = 0; i < dataCount; i++) {
+//        var typeItem = types[Math.round(Math.random() * (types.length - 1))];
+//        var duration = Math.round(Math.random() * 10000);
+//        data.push({
+//            name: typeItem.name,
+//            value: [
+//                index,
+//                baseTime,
+//                baseTime += duration,
+//                duration
+//            ],
+//            itemStyle: {
+//                normal: {
+//                    color: typeItem.color
+//                }
+//            }
+//        });
+//        baseTime += Math.round(Math.random() * 2000);
+//    }
+//});*/
+//console.log(data);
+//function renderItem(params, api) {
+//    console.log(api);
+//    var categoryIndex = api.value(0);
+//    var start = api.coord([api.value(1), categoryIndex]);
+//    var end = api.coord([api.value(2), categoryIndex]);
+//    var height = api.size([0, 1])[1] * 0.6;
+//
+//    return {
+//        type: 'rect',
+//        shape: echarts.graphic.clipRectByRect({
+//            x: start[0],
+//            y: start[1] - height / 2,
+//            width: end[0] - start[0],
+//            height: height
+//        }, {
+//            x: params.coordSys.x,
+//            y: params.coordSys.y,
+//            width: params.coordSys.width,
+//            height: params.coordSys.height
+//        }),
+//        style: api.style()
+//    };
+//}
+//
+//
+//option = {
+//    tooltip: {
+//        formatter: function (params) {
+//            return params.marker + params.name + ': ' + params.value[3] + ' ms';
+//        }
+//    },
+//    title: {
+//        text: 'Profile',
+//        left: 'center'
+//    },
+//    legend: {
+//        data: ['bar', 'error']
+//    },
+//    dataZoom: [{
+//        type: 'slider',
+//        filterMode: 'weakFilter',
+//        showDataShadow: false,
+//        top: 400,
+//        height: 10,
+//        borderColor: 'transparent',
+//        backgroundColor: '#e2e2e2',
+//        handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7v-1.2h6.6z M13.3,22H6.7v-1.2h6.6z M13.3,19.6H6.7v-1.2h6.6z', // jshint ignore:line
+//        handleSize: 20,
+//        handleStyle: {
+//            shadowBlur: 6,
+//            shadowOffsetX: 1,
+//            shadowOffsetY: 2,
+//            shadowColor: '#aaa'
+//        },
+//        labelFormatter: ''
+//    }, {
+//        type: 'inside',
+//        filterMode: 'weakFilter'
+//    }],
+//    grid: {
+//        height:300
+//    },
+//    xAxis: {
+//        type:'time',
+//        //min: startTime,
+//        scale: true,
+//        //axisLabel: {
+//        //    formatter: function (val) {
+//       //         return Math.max(0, val - startTime) + ' ms';
+//       //     }
+//       // }
+//    },
+//    yAxis: {
+//        data: categories
+//    },
+//    series: [{
+//        type: 'custom',
+//        renderItem: renderItem,
+//        itemStyle: {
+//            normal: {
+//                opacity: 0.8
+//            }
+//        },
+//        encode: {
+//            x: [1, 2],
+//            y: 0
+//        },
+//        data: data
+//    },{
+//        name:'.anchor',
+//        type:'line', 
+//        showSymbol:false, 
+//        data:anchor,
+//        itemStyle:{normal:{opacity:0}},
+//        lineStyle:{normal:{opacity:0}}
+//    }]
+//}
+//myChart.on('click',function(p){
+//    console.log('click');
+//    console.log(p)
+//});
+//if (option && typeof option === "object") {
+//    myChart.setOption(option, true);
+//}
+       </script>
+   </body>
+</html>
